@@ -143,9 +143,9 @@ if processar:
                     shap_values = explain.values
                     unique_color = ["red" if values<= 0 else "green" for values in shap_values[0]]
                     plt.bar(colunas_selecionadas, shap_values[0], color=unique_color, width=0.9)
-                    ax.set_title(f"Interpretação dos valores para a Marca: {marca_decod[0]}", fontsize=18, fontweight="bold")
-                    ax.set_xlabel("Componentes do Laptop", fontsize=13, fontweight="bold")
-                    ax.set_ylabel("Impacto dos componentes na previsão", fontsize=13, fontweight="bold")
+                    ax.set_title(f"Interpretação dos valores para a Marca: {marca_decod[0]}", fontsize=16, fontweight="bold")
+                    ax.set_xlabel("Componentes do Laptop", fontsize=12, fontweight="bold")
+                    ax.set_ylabel("Impacto dos componentes na previsão", fontsize=12, fontweight="bold")
                     plt.grid(True, linestyle="solid", linewidth=0.4, color="grey")
                     plt.xticks(rotation=30, ha="right")
                     st.pyplot(fig, clear_figure=True, use_container_width=True)      
@@ -188,7 +188,7 @@ if processar:
                 
                 else:
                     previsao = modelo.predict(novos_dados.values) #Exibição da previsão única
-                    st.markdown("<h2 style='color: grey;'>Resultados da previsão</h2>", unsafe_allow_html=True)
+                    st.markdown("<h1 style='color: grey;'>Resultados da previsão</h1>", unsafe_allow_html=True)
                     st.markdown("O valor aproximado do laptop é: $**{:,.2f}**:".format(previsao[0]))
                     st.markdown("<hr style='border:1px solid green'> ", unsafe_allow_html=True)  
 
@@ -208,7 +208,7 @@ if processar:
         #Tabulação de explicabilidade do modelo
         with tab2:        
         
-            col1, col2 = st.columns([0.45,0.55])
+            col1, col2 = st.columns([0.45,0.55], gap="large")
             
             #Criação e exibição do gráfico de explicabilidade global
             with col1: 
@@ -220,7 +220,7 @@ if processar:
                 imp_colors = ["red" if imp <=0.15 else "green" for imp in importancia] #Lista para seleção de cores vermelha ou verde de acordo com o valor
                 plt.barh(colunas_selecionadas, importancia, color=imp_colors, height=0.9)
                 sns.despine(right=True, bottom=True)
-                st.markdown("<h2 style='color: gray;'>Impacto dos Componentes: Decisões Gerais</h2>", unsafe_allow_html=True)
+                st.markdown("<h3 style='color: gray;'>Impacto dos Componentes: Decisões Gerais</h3>", unsafe_allow_html=True)
                 ax2.set_xlabel("Impacto sobre as previsões", fontsize=12, fontweight="bold")
                 ax2.set_ylabel("Componentes do Laptop", fontsize=12, fontweight="bold")
                 ax2.set_title("Impacto dos Componentes sobre as previsões", fontsize=16, fontweight="bold")
@@ -251,7 +251,7 @@ if processar:
                     plt.barh(colunas_selecionadas, shap_values[0], color=shap_colors, height=0.9)
                     sns.despine(bottom=True, left=True, right=True)
                     ax3.set_title("Impacto dos componentes do laptop sobre uma previsão única", fontweight="bold", fontsize=16)
-                    st.markdown("<h2 style='color: gray;'> Impacto dos componentes: Decisões Individuais</h2>", unsafe_allow_html=True)
+                    st.markdown("<h3 style='color: gray;'> Impacto dos componentes: Decisões Individuais</h>", unsafe_allow_html=True)
                     ax3.set_xlabel("Valores dos componentes", fontweight="bold", fontsize=12)
                     ax3.set_ylabel("Componentes do Laptop", fontweight="bold", fontsize=12)
                     plt.yticks(rotation=30, ha="right")
