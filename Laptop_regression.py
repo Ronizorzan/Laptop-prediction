@@ -51,7 +51,6 @@ def load_and_process_data():
     X_treino, X_teste = seletor.transform(X_treino), seletor.transform(X_teste) 
 
     #Criação do Modelo com os parâmetros encontrados pelo otimizador bayesiano
-    #modelo = XGBRegressor(objective="reg:squarederror", colsample_bytree= 0.5, learning_rate= 0.5, max_depth= 50, max_leaves= 15, n_estimators= 1000, subsample= 1.0)
     modelo = XGBRegressor(objective="reg:squarederror", colsample_bytree= 0.5, learning_rate= 0.1, max_depth= 20, max_leaves= 30, n_estimators= 1000, subsample= 1.0)
     modelo.fit(X_treino, y_treino)
 
