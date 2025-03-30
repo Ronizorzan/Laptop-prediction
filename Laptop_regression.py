@@ -73,11 +73,10 @@ with st.sidebar:
     mape, rmse, data, colunas_selecionadas, modelo, encoders, X_teste, X_teste_original = load_and_process_data()
     
     with st.expander("Clique para expandir"):
-        modo = st.radio("Escolha entre Modelo e Explicabilidade", ["Modelo", "Gráficos de Explicabilidade"])
-    st.markdown(":black[**Calcule um resumo com Laptops de todas as marcas**]")
-    todas_as_marcas = st.checkbox(":black[Calcular resumo para todas as marcas]", value=False, help="Marque essa opção para gerar previsões \
+        modo = st.radio("Escolha entre Modelo e Explicabilidade", ["Modelo", "Gráficos de Explicabilidade"])    
+    todas_as_marcas = st.checkbox(":Calcular resumo para todas as marcas", value=False, help="Marque essa opção para gerar previsões \
                                   \n para todas as marcas com a configuração selecionada ")
-    st.markdown(":black[*Clique abaixo para selecionar as configurações do laptop.*]", help="Clique abaixo para inserir novos dados")    
+    st.markdown("*Clique abaixo para selecionar as configurações do laptop.*", help="Clique abaixo para inserir novos dados")    
     with st.expander(":green[**Inserir configurações para visualizar previsão**]"):
         novos_dados = [st.selectbox("Selecione a Marca", data["Brand"].unique()),
                         st.selectbox("Selecione o Processador", data["Processor"].unique()),
@@ -87,7 +86,7 @@ with st.sidebar:
                         st.selectbox("Selecione o Tamanho da Tela", data["Screen Size"].unique()),
                         st.selectbox("Selecione a resolução", data["Resolution"].unique())                    
                         ]
-    processar = st.button(":black[*Processar os dados*]")
+    processar = st.button("*Processar os dados*")
 if processar:
     with st.spinner("Aguarde... Carregando os dados"):
                               
