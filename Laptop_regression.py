@@ -72,11 +72,11 @@ with st.sidebar:
     st.header(":green[**Selecione as Configurações:**]")    
     mape, rmse, data, colunas_selecionadas, modelo, encoders, X_teste, X_teste_original = load_and_process_data()
     
-    
-    #Inserção de novos dados para previsão
+    with st.expander("Clique para expandir"):
+        modo = st.radio("Escolha entre Modelo e Explicabilidade", ["Modelo", "Gráficos de Explicabilidade"])
     st.markdown(":black[**Calcule um resumo com Laptops de todas as marcas**]")
     todas_as_marcas = st.checkbox(":black[Calcular resumo para todas as marcas]", value=False, help="Marque essa opção para gerar previsões \
-                                  \n para todas as maracas com a mesma configuração ")
+                                  \n para todas as marcas com a configuração selecionada ")
     st.markdown(":black[*Clique abaixo para selecionar as configurações do laptop.*]", help="Clique abaixo para inserir novos dados")    
     with st.expander(":green[**Inserir configurações para visualizar previsão**]"):
         novos_dados = [st.selectbox("Selecione a Marca", data["Brand"].unique()),
@@ -90,12 +90,8 @@ with st.sidebar:
     processar = st.button(":black[*Processar os dados*]")
 if processar:
     with st.spinner("Aguarde... Carregando os dados"):
-
-        #Tabulações
-        tab1, tab2 = st.tabs(["Modelo", "Gráficos de Explicabilidade"])
-        
-        
-        with tab1:
+                              
+        if modo=="Modelo":
             col1, col2 = st.columns([0.55,0.45], gap="large")
             with col1:
 
@@ -108,6 +104,7 @@ if processar:
 
                 #Plotagem interpretação dos novos dados únicos
                 if not todas_as_marcas:
+                    st.markdown("<h3 style='color: gray;'>Impacto dos Componentes na configuração Inserida </h3>", unsafe_allow_html=True)
                     fig, ax = plt.subplots()
                     sns.set_style(style="dark")
                     
@@ -118,7 +115,7 @@ if processar:
                     shap_values = explain.values
                     colors = ["red" if values <=0 else "green" for values in shap_values[0]]
                     plt.bar(colunas_selecionadas, shap_values[0], color=colors, width=0.9)                 
-                    ax.set_title(f"Interpretação dos valores para a Marca: {marca_dec[0]}", fontsize=16, fontweight="bold")
+                    ax.set_title(f"Impacto dos componentes na previsão da marca: {marca_dec[0]}", fontsize=16, fontweight="bold")
                     sns.despine(bottom=False, top=True, left=False, right=True)
                     ax.set_xlabel("Componentes do Laptop", fontsize=12, fontweight="bold")
                     ax.set_ylabel("Impacto dos componentes na previsão", fontsize=12, fontweight="bold")                    
@@ -135,6 +132,7 @@ if processar:
 
                 #Plotagem interpretação dos novos dados múltiplos
                 else:
+                    st.markdown("<h3 style='color: gray;'>Impacto dos Componentes na configuração Inserida </h3>", unsafe_allow_html=True)
                     fig, ax = plt.subplots()
                     sns.set_style(style="dark")
 
@@ -145,7 +143,7 @@ if processar:
                     shap_values = explain.values
                     unique_color = ["red" if values<= 0 else "green" for values in shap_values[0]]
                     plt.bar(colunas_selecionadas, shap_values[0], color=unique_color, width=0.9)
-                    ax.set_title(f"Interpretação dos valores para a Marca: {marca_decod[0]}", fontsize=16, fontweight="bold")
+                    ax.set_title(f"Impacto dos componentes na previsão da marca: {marca_decod[0]}", fontsize=16, fontweight="bold", color="black")
                     sns.despine(bottom=False, top=True, left=False, right=True)
                     ax.set_xlabel("Componentes do Laptop", fontsize=12, fontweight="bold")
                     ax.set_ylabel("Impacto dos componentes na previsão", fontsize=12, fontweight="bold")
@@ -210,7 +208,7 @@ if processar:
 
 
         #Tabulação de explicabilidade do modelo
-        with tab2:        
+        if modo=="Gráficos de Explicabilidade":
         
             col1, col2 = st.columns([0.45,0.55], gap="large")
             
@@ -232,6 +230,7 @@ if processar:
                 plt.yticks(rotation=30, ha="right")
                 plt.tight_layout()
                 st.pyplot(fig2, use_container_width=True)
+                st.markdown("<hr style='border:1px solid green'>", unsafe_allow_html=True)
                 st.markdown("*O gráfico acima mostra o impacto geral dos componentes sobre o valor dos laptops*")
                 st.markdown("Este gráfico revela a influência global de cada componente nos valores dos laptops. Observe como a Memória RAM, Resolução e Processador impulsionam o valor do laptop, \
                              enquanto determinadas GPUs e Armazenamentos podem reduzir significativamente o preço!")
@@ -262,6 +261,7 @@ if processar:
                     plt.axvline(0, color="black", linewidth=1.5)
                     plt.yticks(rotation=30, ha="right")
                     st.pyplot(fig3, use_container_width=True)
+                    st.markdown("<hr style='border:1px solid green'>", unsafe_allow_html=True)
                     st.markdown("**O gráfico acima mostra a influência de cada componente sobre um laptop específico**")
                     st.markdown("**Aqui, visualizamos uma análise detalhada do impacto de cada componente em uma configuração específica de laptop.**")                    
                     st.markdown(f"*Valor Previsto pelo Modelo para essa configuração: $*  **{modelo.predict(row_reshaped)[0]:,.2f}**")
