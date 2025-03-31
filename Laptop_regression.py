@@ -69,15 +69,15 @@ def load_and_process_data():
 
 #Criação da barra lateral
 with st.sidebar:
-    st.header(":green[**Selecione as Configurações:**]")    
+    st.header(":green[**Configurações:**]")    
     mape, rmse, data, colunas_selecionadas, modelo, encoders, X_teste, X_teste_original = load_and_process_data()
     
     with st.expander("Clique para expandir"):
-        modo = st.radio("Escolha entre Modelo e Explicabilidade", ["Modelo", "Gráficos de Explicabilidade"])    
-    todas_as_marcas = st.checkbox(":Calcular resumo para todas as marcas", value=False, help="Marque essa opção para gerar previsões \
-                                  \n para todas as marcas com a configuração selecionada ")
+        modo = st.radio("Escolha entre Modelo e Explicabilidade", ["Modelo", "Gráficos de Explicabilidade"])       
     st.markdown("*Clique abaixo para selecionar as configurações do laptop.*", help="Clique abaixo para inserir novos dados")    
     with st.expander(":green[**Inserir configurações para visualizar previsão**]"):
+        todas_as_marcas = st.checkbox("Calcular resumo para todas as marcas", value=False, help="Marque essa opção para gerar previsões \
+                                  \n para todas as marcas com a configuração selecionada ")
         novos_dados = [st.selectbox("Selecione a Marca", data["Brand"].unique()),
                         st.selectbox("Selecione o Processador", data["Processor"].unique()),
                         st.selectbox("Insira a quantidade de Memória RAM (GB) ", data["RAM (GB)"].unique()),
@@ -125,7 +125,7 @@ if processar:
                     st.markdown("<hr style='border:1px solid green'>", unsafe_allow_html=True)
                     st.markdown(f"*O gráfico acima exibe em detalhes os componentes que tiveram impacto substancial \
                                 (em verde) no valor do laptop, já as barras vermelhas indicam os componentes que \
-                                impulsionaram negativamente o valor dos Laptops da Marca:* **{marca_dec[0]}** ")
+                                impulsionaram negativamente o valor dos Laptops da Marca:* :green[**{marca_dec[0]}**] ")
                     
 
 
@@ -153,7 +153,7 @@ if processar:
                     st.markdown("<hr style='border:1px solid green'>", unsafe_allow_html=True)          
                     st.markdown(f"*O gráfico acima exibe em detalhes os componentes que tiveram impacto substancial \
                                 (em verde) no valor do laptop, já as barras vermelhas indicam os componentes que \
-                                impulsionaram negativamente o valor dos Laptops da Marca:* **{marca_decod[0]}**")
+                                impulsionaram negativamente o valor dos Laptops da Marca:* :green[**{marca_decod[0]}**]")
 
 
         
@@ -178,19 +178,19 @@ if processar:
                                 além de um resumo com o valor médio, menor valor e maior valor.")                
                     st.markdown("**Valores gerados para todas as marcas (em $)**")
                     st.dataframe(previsoes_df)
-                    st.markdown("*Valor Médio dos Laptops: em ($):* **{:,.2f}**".format(previsoes_df.values.mean()))
+                    st.markdown("*Valor Médio dos Laptops: em ($):* :orange[**{:,.2f}**]".format(previsoes_df.values.mean()))
                     minimo = previsoes_df.values.min()
                     maximo = previsoes_df.values.max()
                     marca_minimo = previsoes_df.columns[previsoes_df.values[0]==minimo]
                     marca_maximo = previsoes_df.columns[previsoes_df.values[0]==maximo]
-                    st.markdown("*Menor valor entre os Laptops em ($):*  **{:,.2f}** - Marca: **{}**".format(minimo, marca_minimo[0]))
-                    st.markdown("*Maior Valor entre os Laptops em ($):*  **{:,.2f}** - Marca: **{}**".format(maximo, marca_maximo[0]))                
+                    st.markdown("*Menor valor entre os Laptops em ($):*  :green[**{:,.2f}**] - Marca: **{}**".format(minimo, marca_minimo[0]))
+                    st.markdown("*Maior Valor entre os Laptops em ($):*  :red[**{:,.2f}**] - Marca: **{}**".format(maximo, marca_maximo[0]))                
                     st.markdown("<hr style='border:1px solid green'> ", unsafe_allow_html=True)  
                 
                 else:
                     previsao = modelo.predict(novos_dados.values) #Exibição da previsão única
                     st.markdown("<h1 style='color: grey;'>Resultados da previsão</h1>", unsafe_allow_html=True)
-                    st.markdown("O valor aproximado do laptop é: $**{:,.2f}**:".format(previsao[0]))
+                    st.markdown("O valor aproximado do laptop é: :green[**${:,.2f}**]:".format(previsao[0]))
                     st.markdown("<hr style='border:1px solid green'> ", unsafe_allow_html=True)  
 
                 
@@ -206,7 +206,7 @@ if processar:
                 
 
 
-        #Tabulação de explicabilidade do modelo
+        #Explicabilidades do modelo
         if modo=="Gráficos de Explicabilidade":
         
             col1, col2 = st.columns([0.45,0.55], gap="large")
@@ -249,6 +249,7 @@ if processar:
                     fig3, ax3 = plt.subplots()
                     sns.set_style(style="dark")                               
 
+                    #Configuração da plotagem da explicabilidade local
                     shap_values = explain.values
                     shap_colors = ["red" if values<= 0 else "green" for values in shap_values[0]]
                     plt.barh(colunas_selecionadas, shap_values[0], color=shap_colors, height=0.9)
@@ -266,6 +267,7 @@ if processar:
                     st.markdown(f"*Valor Previsto pelo Modelo para essa configuração: $*  **{modelo.predict(row_reshaped)[0]:,.2f}**")
                     
                                                                                                                                          
+                    #Reshape do dataframe original para formato mais amigável
                     row_original = pd.DataFrame(X_teste_original, columns=colunas_selecionadas)
                     st.markdown("**O Dataframe abaixo possui a configuração original do laptop mostrado no gráfico acima**")    
                     row_original = row_original.iloc[instancia_escolhida, :].reset_index().T
