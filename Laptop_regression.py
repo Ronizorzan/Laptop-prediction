@@ -1,7 +1,11 @@
 #Bibliotecas necessárias
 import streamlit as st
 import pandas as pd
+<<<<<<< HEAD
 from numpy.random import randint
+=======
+from numpy.random import randint as randint
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
 from numpy import reshape
 from xgboost import XGBRegressor
 from sklearn.feature_selection import SelectKBest, f_regression
@@ -13,10 +17,18 @@ import matplotlib.pyplot as plt
 import shap
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
 #Configuração do Layout
 st.set_page_config(page_title="Aplicação para Previsão de Preços de Laptops", layout="wide")
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
 #Função principal
 @st.cache_resource
 def load_and_process_data():
@@ -28,12 +40,19 @@ def load_and_process_data():
     #Separação  entre variáveis independentes e variável dependente
     X = data.iloc[:,:-1]
     y = data.iloc[:,-1]
+<<<<<<< HEAD
  
     X_treino, X_teste, y_treino, y_teste = train_test_split(X,y, test_size = 0.3, random_state=3219)
 
     X_teste_original = X_teste.copy()
 
             
+=======
+
+    X_treino, X_teste, y_treino, y_teste = train_test_split(X,y, test_size = 0.3, random_state=3219)
+   
+    
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
     #Codificação de categorias e salvamanento do objeto em dicionário para uso posterior
     encoders = {}
     for col in X_treino.columns:
@@ -60,15 +79,25 @@ def load_and_process_data():
     rmse = root_mean_squared_error(y_teste, previsoes)
 
     mape = mean_absolute_percentage_error(y_teste, previsoes)             
+<<<<<<< HEAD
                
 
     #Retorno de variáveis que serão utilizadas posteriormente
     return mape, rmse, data, colunas_selecionadas, modelo, encoders, X_teste, X_teste_original  
+=======
+              
+
+    
+    #Retorno de variáveis que vamos utilizar posteriormente
+    return mape, rmse, data, colunas_selecionadas, modelo, encoders, X_teste
+
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
 
 
 
 #Criação da barra lateral
 with st.sidebar:
+<<<<<<< HEAD
     st.header(":green[**Configurações:**]")    
     mape, rmse, data, colunas_selecionadas, modelo, encoders, X_teste, X_teste_original = load_and_process_data()
     
@@ -91,6 +120,33 @@ if processar:
     with st.spinner("Aguarde... Carregando os dados"):
                               
         if modo=="Modelo":
+=======
+    st.header("Selecione as Configurações:")    
+    mape, rmse, data, colunas_selecionadas, modelo, encoders, X_teste = load_and_process_data()
+    
+    #Inserção de novos dados para previsão
+    st.markdown("*Calcule um resumo com Laptops de todas as marcas*")
+    todas_as_marcas = st.checkbox("Calcular resumo para todas as marcas", value=False)
+    st.markdown("*Selecione as características do laptop.*")    
+    novos_dados = [st.selectbox("Selecione a Marca", data["Brand"].unique()),
+                    st.selectbox("Selecione o Processador", data["Processor"].unique()),
+                    st.selectbox("Insira a quantidade de Memória RAM (GB) ", data["RAM (GB)"].unique()),
+                    st.selectbox("Selecione o Armazenamento", data["Storage"].unique()),
+                    st.selectbox("Selecione a GPU", data["GPU"].unique()),
+                    st.selectbox("Selecione o Tamanho da Tela", data["Screen Size"].unique()),
+                    st.selectbox("Selecione a resolução", data["Resolution"].unique()),
+                    #st.selectbox("Selecione o Sistema Operacional", data["Operating System"].unique())
+                    ]
+    processar = st.button("Processar os dados")
+if processar:
+    with st.spinner("Aguarde... Carregando os dados"):
+
+        #Tabulações
+        tab1, tab2 = st.tabs(["Modelo", "Gráficos de Explicabilidade"])
+        
+        
+        with tab1:
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
             col1, col2 = st.columns([0.55,0.45], gap="large")
             with col1:
 
@@ -103,9 +159,14 @@ if processar:
 
                 #Plotagem interpretação dos novos dados únicos
                 if not todas_as_marcas:
+<<<<<<< HEAD
                     st.markdown("<h3 style='color: gray;'>Impacto dos Componentes na configuração Inserida </h3>", unsafe_allow_html=True)
                     fig, ax = plt.subplots()
                     sns.set_style(style="dark")
+=======
+                    fig, ax = plt.subplots()
+                    sns.set_style(style="darkgrid")
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                     
                     explainer = shap.Explainer(modelo, feature_names=colunas_selecionadas)
                     novos_dados_reshaped = reshape(novos_dados, (1,-1))
@@ -114,26 +175,42 @@ if processar:
                     shap_values = explain.values
                     colors = ["red" if values <=0 else "green" for values in shap_values[0]]
                     plt.bar(colunas_selecionadas, shap_values[0], color=colors, width=0.9)                 
+<<<<<<< HEAD
                     ax.set_title(f"Impacto dos componentes na previsão da marca: {marca_dec[0]}", fontsize=16, fontweight="bold")
                     sns.despine(bottom=False, top=True, left=False, right=True)
                     ax.set_xlabel("Componentes do Laptop", fontsize=12, fontweight="bold")
                     ax.set_ylabel("Impacto dos componentes na previsão", fontsize=12, fontweight="bold")                    
                     plt.grid(True, linestyle="solid", linewidth=0.0, color="black")
                     plt.axhline(0, color="black", linewidth=1.0)
+=======
+                    ax.set_title(f"Interpretação dos valores para a Marca: {marca_dec[0]}", fontsize=16, fontweight="bold")
+                    ax.set_xlabel("Componentes do Laptop", fontsize=12, fontweight="bold")
+                    ax.set_ylabel("Impacto dos componentes na previsão", fontsize=12, fontweight="bold")
+                    plt.grid(True, linestyle="solid", linewidth=0.4, color="grey")
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                     plt.xticks(rotation=30, ha="right")
                     st.pyplot(fig, use_container_width=True)
                     st.markdown("<hr style='border:1px solid green'>", unsafe_allow_html=True)
                     st.markdown(f"*O gráfico acima exibe em detalhes os componentes que tiveram impacto substancial \
                                 (em verde) no valor do laptop, já as barras vermelhas indicam os componentes que \
+<<<<<<< HEAD
                                 impulsionaram negativamente o valor dos Laptops da Marca:* :green[**{marca_dec[0]}**] ")
+=======
+                                impulsionaram negativamente o valor dos Laptops da Marca:* **{marca_dec[0]}** ")
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                     
 
 
                 #Plotagem interpretação dos novos dados múltiplos
                 else:
+<<<<<<< HEAD
                     st.markdown("<h3 style='color: gray;'>Impacto dos Componentes na configuração Inserida </h3>", unsafe_allow_html=True)
                     fig, ax = plt.subplots()
                     sns.set_style(style="dark")
+=======
+                    fig, ax = plt.subplots()
+                    sns.set_style(style="darkgrid")
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
 
                     explainer = shap.Explainer(modelo, feature_names=colunas_selecionadas)
                     novos_dados_unique = reshape(novos_dados.iloc[0,:], (1,-1))
@@ -142,18 +219,29 @@ if processar:
                     shap_values = explain.values
                     unique_color = ["red" if values<= 0 else "green" for values in shap_values[0]]
                     plt.bar(colunas_selecionadas, shap_values[0], color=unique_color, width=0.9)
+<<<<<<< HEAD
                     ax.set_title(f"Impacto dos componentes na previsão da marca: {marca_decod[0]}", fontsize=16, fontweight="bold", color="black")
                     sns.despine(bottom=False, top=True, left=False, right=True)
                     ax.set_xlabel("Componentes do Laptop", fontsize=12, fontweight="bold")
                     ax.set_ylabel("Impacto dos componentes na previsão", fontsize=12, fontweight="bold")
                     plt.axhline(0, color="black", linewidth=1.0)
                     plt.grid(True, linestyle="solid", linewidth=0.0, color="grey")
+=======
+                    ax.set_title(f"Interpretação dos valores para a Marca: {marca_decod[0]}", fontsize=16, fontweight="bold")
+                    ax.set_xlabel("Componentes do Laptop", fontsize=12, fontweight="bold")
+                    ax.set_ylabel("Impacto dos componentes na previsão", fontsize=12, fontweight="bold")
+                    plt.grid(True, linestyle="solid", linewidth=0.4, color="grey")
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                     plt.xticks(rotation=30, ha="right")
                     st.pyplot(fig, clear_figure=True, use_container_width=True)      
                     st.markdown("<hr style='border:1px solid green'>", unsafe_allow_html=True)          
                     st.markdown(f"*O gráfico acima exibe em detalhes os componentes que tiveram impacto substancial \
                                 (em verde) no valor do laptop, já as barras vermelhas indicam os componentes que \
+<<<<<<< HEAD
                                 impulsionaram negativamente o valor dos Laptops da Marca:* :green[**{marca_decod[0]}**]")
+=======
+                                impulsionaram negativamente o valor dos Laptops da Marca:* **{marca_decod[0]}**")
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
 
 
         
@@ -178,19 +266,32 @@ if processar:
                                 além de um resumo com o valor médio, menor valor e maior valor.")                
                     st.markdown("**Valores gerados para todas as marcas (em $)**")
                     st.dataframe(previsoes_df)
+<<<<<<< HEAD
                     st.markdown("*Valor Médio dos Laptops: em ($):* :orange[**{:,.2f}**]".format(previsoes_df.values.mean()))
+=======
+                    st.markdown("*Valor Médio dos Laptops: em ($):* **{:,.2f}**".format(previsoes_df.values.mean()))
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                     minimo = previsoes_df.values.min()
                     maximo = previsoes_df.values.max()
                     marca_minimo = previsoes_df.columns[previsoes_df.values[0]==minimo]
                     marca_maximo = previsoes_df.columns[previsoes_df.values[0]==maximo]
+<<<<<<< HEAD
                     st.markdown("*Menor valor entre os Laptops em ($):*  :green[**{:,.2f}**] - Marca: **{}**".format(minimo, marca_minimo[0]))
                     st.markdown("*Maior Valor entre os Laptops em ($):*  :red[**{:,.2f}**] - Marca: **{}**".format(maximo, marca_maximo[0]))                
+=======
+                    st.markdown("*Menor valor entre os Laptops em ($):*  **{:,.2f}** - Marca: **{}**".format(minimo, marca_minimo[0]))
+                    st.markdown("*Maior Valor entre os Laptops em ($):*  **{:,.2f}** - Marca: **{}**".format(maximo, marca_maximo[0]))                
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                     st.markdown("<hr style='border:1px solid green'> ", unsafe_allow_html=True)  
                 
                 else:
                     previsao = modelo.predict(novos_dados.values) #Exibição da previsão única
                     st.markdown("<h1 style='color: grey;'>Resultados da previsão</h1>", unsafe_allow_html=True)
+<<<<<<< HEAD
                     st.markdown("O valor aproximado do laptop é: :green[**${:,.2f}**]:".format(previsao[0]))
+=======
+                    st.markdown("O valor aproximado do laptop é: $**{:,.2f}**:".format(previsao[0]))
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                     st.markdown("<hr style='border:1px solid green'> ", unsafe_allow_html=True)  
 
                 
@@ -206,8 +307,13 @@ if processar:
                 
 
 
+<<<<<<< HEAD
         #Explicabilidades do modelo
         if modo=="Gráficos de Explicabilidade":
+=======
+        #Tabulação de explicabilidade do modelo
+        with tab2:        
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
         
             col1, col2 = st.columns([0.45,0.55], gap="large")
             
@@ -215,21 +321,35 @@ if processar:
             with col1: 
                 importancia = modelo.feature_importances_
                 fig2, ax2= plt.subplots()
+<<<<<<< HEAD
                 sns.set_style(style="dark")
+=======
+                sns.set_style(style="darkgrid")
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                 
                 
                 imp_colors = ["red" if imp <=0.15 else "green" for imp in importancia] #Lista para seleção de cores vermelha ou verde de acordo com o valor
                 plt.barh(colunas_selecionadas, importancia, color=imp_colors, height=0.9)
+<<<<<<< HEAD
                 sns.despine(bottom=False, top=True, left=True, right=True)
+=======
+                sns.despine(right=True, bottom=True)
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                 st.markdown("<h3 style='color: gray;'>Impacto dos Componentes: Decisões Gerais</h3>", unsafe_allow_html=True)
                 ax2.set_xlabel("Impacto sobre as previsões", fontsize=12, fontweight="bold")
                 ax2.set_ylabel("Componentes do Laptop", fontsize=12, fontweight="bold")
                 ax2.set_title("Impacto dos Componentes sobre as previsões", fontsize=16, fontweight="bold")
+<<<<<<< HEAD
                 plt.axvline(0, color="black", linewidth=1.5)
                 plt.yticks(rotation=30, ha="right")
                 plt.tight_layout()
                 st.pyplot(fig2, use_container_width=True)
                 st.markdown("<hr style='border:1px solid green'>", unsafe_allow_html=True)
+=======
+                plt.yticks(rotation=30, ha="right")
+                plt.tight_layout()
+                st.pyplot(fig2, use_container_width=True)
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                 st.markdown("*O gráfico acima mostra o impacto geral dos componentes sobre o valor dos laptops*")
                 st.markdown("Este gráfico revela a influência global de cada componente nos valores dos laptops. Observe como a Memória RAM, Resolução e Processador impulsionam o valor do laptop, \
                              enquanto determinadas GPUs e Armazenamentos podem reduzir significativamente o preço!")
@@ -247,6 +367,7 @@ if processar:
                     explain = explainer(row_reshaped)
                     
                     fig3, ax3 = plt.subplots()
+<<<<<<< HEAD
                     sns.set_style(style="dark")                               
 
                     #Configuração da plotagem da explicabilidade local
@@ -254,10 +375,19 @@ if processar:
                     shap_colors = ["red" if values<= 0 else "green" for values in shap_values[0]]
                     plt.barh(colunas_selecionadas, shap_values[0], color=shap_colors, height=0.9)
                     sns.despine(bottom=False, top=True, left=False, right=True)
+=======
+                    sns.set_style(style="darkgrid")                               
+
+                    shap_values = explain.values
+                    shap_colors = ["red" if values<= 0 else "green" for values in shap_values[0]]
+                    plt.barh(colunas_selecionadas, shap_values[0], color=shap_colors, height=0.9)
+                    sns.despine(bottom=True, left=True, right=True)
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
                     ax3.set_title("Impacto dos componentes do laptop sobre uma previsão única", fontweight="bold", fontsize=16)
                     st.markdown("<h3 style='color: gray;'> Impacto dos componentes: Decisões Individuais</h>", unsafe_allow_html=True)
                     ax3.set_xlabel("Valores dos componentes", fontweight="bold", fontsize=12)
                     ax3.set_ylabel("Componentes do Laptop", fontweight="bold", fontsize=12)
+<<<<<<< HEAD
                     plt.axvline(0, color="black", linewidth=1.5)
                     plt.yticks(rotation=30, ha="right")
                     st.pyplot(fig3, use_container_width=True)
@@ -279,3 +409,12 @@ if processar:
                     
                                         
             
+=======
+                    plt.yticks(rotation=30, ha="right")
+                    st.pyplot(fig3, use_container_width=True)
+                    st.markdown("**O gráfico acima mostra a influência de cada componente sobre um laptop específico**")
+                    st.markdown("**Aqui, visualizamos uma análise detalhada do impacto de cada componente em uma configuração específica de laptop.**")                    
+                    st.markdown(f"*Valor Previsto pelo Modelo para essa configuração: $*  **{modelo.predict(row_reshaped)[0]:,.2f}**")
+            
+                    
+>>>>>>> 3918f824b2d8910b4c3f22ad5dc333783efa3ed6
