@@ -2,7 +2,6 @@
 import streamlit as st
 import pandas as pd
 from numpy.random import randint
-from numpy.random import randint as randint
 from numpy import reshape
 from xgboost import XGBRegressor
 from sklearn.feature_selection import SelectKBest, f_regression
@@ -115,7 +114,7 @@ if processar:
 
                         st.markdown("<h3 style='color: gray;'>Impacto dos Componentes na configuração Inserida </h3>", unsafe_allow_html=True)
                         fig, ax = plt.subplots()
-                        sns.set_style(style="dark")
+                        sns.set_style(style="white")
 
                         
                         #Configurações do gráfico de explicabilidade local
@@ -130,7 +129,7 @@ if processar:
                         ax.set_title(f"Impacto dos componentes na previsão da marca: {marca_dec[0]}", fontsize=16, fontweight="bold")
                         sns.despine(bottom=False, top=True, left=False, right=True)
                         ax.set_xlabel("Componentes do Laptop", fontsize=12, fontweight="bold")
-                        ax.set_ylabel("Impacto dos componentes na previsão", fontsize=12, fontweight="bold")                    
+                        ax.set_ylabel("Tamanho do impacto na previsão", fontsize=12, fontweight="bold")                    
                         plt.grid(True, linestyle="solid", linewidth=0.0, color="black")
                         plt.axhline(0, color="black", linewidth=1.0)                    
                         plt.xticks(rotation=30, ha="right")
@@ -138,7 +137,7 @@ if processar:
                         st.markdown("<hr style='border:1px solid green'>", unsafe_allow_html=True)
                         st.markdown(f"*O gráfico acima exibe em detalhes os componentes que tiveram impacto substancial \
                                     (em verde) no valor do laptop, já as barras vermelhas indicam os componentes que \
-                                    impulsionaram negativamente o valor dos Laptops da Marca:* :green[**{marca_dec[0]}**] ")
+                                    impulsionaram negativamente o valor dos Laptops da Marca:* :orange[**{marca_dec[0]}**] ")
 
                     
 
@@ -148,7 +147,7 @@ if processar:
 
                         st.markdown("<h3 style='color: gray;'>Impacto dos Componentes na configuração Inserida </h3>", unsafe_allow_html=True)
                         fig, ax = plt.subplots()
-                        sns.set_style(style="dark")
+                        sns.set_style(style="white")
 
 
                         explainer = shap.Explainer(modelo, feature_names=colunas_selecionadas)
@@ -162,7 +161,7 @@ if processar:
                         ax.set_title(f"Impacto dos componentes na previsão da marca: {marca_decod[0]}", fontsize=16, fontweight="bold", color="black")
                         sns.despine(bottom=False, top=True, left=False, right=True)
                         ax.set_xlabel("Componentes do Laptop", fontsize=12, fontweight="bold")
-                        ax.set_ylabel("Impacto dos componentes na previsão", fontsize=12, fontweight="bold")
+                        ax.set_ylabel("Tamanho do impacto na previsão", fontsize=12, fontweight="bold")
                         plt.axhline(0, color="black", linewidth=1.0)
                         plt.grid(True, linestyle="solid", linewidth=0.0, color="grey")
                         plt.xticks(rotation=30, ha="right")
@@ -170,7 +169,7 @@ if processar:
                         st.markdown("<hr style='border:1px solid green'>", unsafe_allow_html=True)          
                         st.markdown(f"*O gráfico acima exibe em detalhes os componentes que tiveram impacto substancial \
                                     (em verde) no valor do laptop, já as barras vermelhas indicam os componentes que \
-                                    impulsionaram negativamente o valor dos Laptops da Marca:* :green[**{marca_decod[0]}**]")
+                                    impulsionaram negativamente o valor dos Laptops da Marca:* :orange[**{marca_decod[0]}**]")
 
 
 
@@ -215,7 +214,7 @@ if processar:
                         previsao = modelo.predict(novos_dados.values) #Exibição da previsão única
                         st.markdown("<h1 style='color: grey;'>Resultados da previsão</h1>", unsafe_allow_html=True)
 
-                        st.markdown("O valor aproximado do laptop é: :green[**${:,.2f}**]:".format(previsao[0]))
+                        st.markdown("O valor aproximado do laptop é: :orange[**${:,.2f}**]:".format(previsao[0]))
                         st.markdown("<hr style='border:1px solid green'> ", unsafe_allow_html=True)  
 
                     
@@ -223,9 +222,9 @@ if processar:
 
                     st.markdown("*O gráfico de barras ao lado revela de forma detalhada como cada componente individual afeta o preço do laptop. \
                                 As barras verdes representam impacto positivo no preço, enquanto as vermelhas impactam negativamente o preço do laptop.*")                            
-                    st.markdown(f"Mean Absolute Percentage Error (MAPE): **{mape*100:.2f}**%")                
-                    st.markdown(f"Root Mean Squared Error (RMSE): **{rmse:.2f}**")
-                    st.markdown(f"A análise de desempenho do modelo mostra um MAPE de {mape*100:.2f}% e um RMSE de {rmse:.2f}, \
+                    st.markdown(f"Mean Absolute Percentage Error (MAPE): :green[**{mape*100:.2f}**%]")                
+                    st.markdown(f"Root Mean Squared Error (RMSE): :green[**{rmse:.2f}**]")
+                    st.markdown(f"A análise de desempenho do modelo mostra um MAPE de :green[{mape*100:.2f}%] e um RMSE de :green[{rmse:.2f}], \
                                 indicando a alta precisão das previsões e a confiança que você pode ter nos resultados do modelo.")
                     
                 
@@ -241,7 +240,7 @@ if processar:
                     importancia = modelo.feature_importances_
                     fig2, ax2= plt.subplots()
 
-                    sns.set_style(style="dark")
+                    sns.set_style(style="white")
                     
                     imp_colors = ["red" if imp <=0.15 else "green" for imp in importancia] #Lista para seleção de cores vermelha ou verde de acordo com o valor
                     plt.barh(colunas_selecionadas, importancia, color=imp_colors, height=0.9)
@@ -275,7 +274,7 @@ if processar:
                         
                         #Configurações da plotagem da explicabilidade local
                         fig3, ax3 = plt.subplots()
-                        sns.set_style(style="dark")                                                       
+                        sns.set_style(style="white")                                                       
                         shap_values = explain.values
                         shap_colors = ["red" if values<= 0 else "green" for values in shap_values[0]]
                         plt.barh(colunas_selecionadas, shap_values[0], color=shap_colors, height=0.9)
