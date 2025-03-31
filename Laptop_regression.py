@@ -194,7 +194,7 @@ if processar:
                         st.markdown("Descubra abaixo os valores previstos para diferentes marcas de laptops com a mesma configuração, \
                                     além de um resumo com o valor médio, menor valor e maior valor.")                
                         st.markdown("**Valores gerados para todas as marcas (em $)**")
-                        st.dataframe(previsoes_df)
+                        st.dataframe(previsoes_df.round(2))
                         
                         #Cálculo dos Valores mínimo e máximo
                         minimo = previsoes_df.values.min()
